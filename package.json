@@ -2,11 +2,9 @@
   "name": "shopping-cart-app",
   "private": false,
   "version": "1.0.0",
-  "author": "Mihail Gaberov",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "vitest",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
