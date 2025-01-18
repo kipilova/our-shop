@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import useLocalStorageState from 'use-local-storage-state'
-
+import { ResetCartButton } from '../ResetCart/ResetCart.tsx'
 import logo from '/logo.svg'
 import { CartWidget } from '../CartWidget'
 import { CartProps } from '../Products/Products.tsx'
@@ -52,7 +52,10 @@ export const Header: FunctionComponent = () => {
         </Link>
       </div>
       <div>
-        <CartWidget productsCount={productsCount} />
+        <ResetCartButton />
+      </div>
+      <div>
+        <CartWidget />
       </div>
     </header>
   )

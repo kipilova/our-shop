@@ -24,14 +24,14 @@
       }
 
       button {
-        background-color: #fbd815;
+        background-color: #ffe54f;
         width: 13rem;
         padding: .5rem;
         font-size: 1.1em;
         border-radius: 25px;
         border-color: #D5D9D9;
         border-style: solid;
-        border-width: 1px;
+        border-width: 3px;
 
         &:hover:not([disabled]) {
           background-color: #eecf1d;
