@@ -26,6 +26,8 @@ export const Products: FunctionComponent = () => {
   const [error, setError] = useState(false);
   const [cart, setCart] = useLocalStorageState<CartProps>('cart', {});
 
+  console.log(cart);
+
   useEffect(() => {
     fetchData(API_URL);
   }, []);

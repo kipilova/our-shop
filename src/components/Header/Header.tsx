@@ -1,10 +1,10 @@
 import { FunctionComponent, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import useLocalStorageState from 'use-local-storage-state'
+// import useLocalStorageState from 'use-local-storage-state'
 import { ResetCartButton } from '../ResetCart/ResetCart.tsx'
 import logo from '/logo.svg'
 import { CartWidget } from '../CartWidget'
-import { CartProps } from '../Products/Products.tsx'
+// import { CartProps } from '../Products/Products.tsx'
 import classes from './header.module.scss'
 
 export const Header: FunctionComponent = () => {
@@ -40,9 +40,9 @@ export const Header: FunctionComponent = () => {
       productsCountElement.style.fontSize = "2em"
     }
   }
-  const [cart,] = useLocalStorageState<CartProps>('cart', {})
+  // const [cart,] = useLocalStorageState<CartProps>('cart', {})
 
-  const productsCount: number = Object.keys(cart || {}).length
+  // const productsCount: number = Object.keys(cart || {}).length
 
   return (
     <header className={classes.header}>
