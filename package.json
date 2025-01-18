@@ -33,6 +33,7 @@
     "typescript": "^5.0.2",
     "use-local-storage-state": "^18.3.3",
     "vite": "^4.3.9",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "rollup": "3.0.0"
   }
 }
