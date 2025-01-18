@@ -3,7 +3,7 @@
   "private": false,
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://kipilova.github.io/our-shop/",
+  "homepage": "https://kipilova.github.io/our-shop",
   "scripts": {
     "start": "vite",
     "dev": "vite",
