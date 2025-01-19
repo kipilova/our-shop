@@ -4,6 +4,8 @@ import useLocalStorageState from 'use-local-storage-state';
 import { CurrencyFormatter } from '../CurrencyFormatter';
 import classes from './products.module.scss';
 import { Loader } from '../Loader';
+import { getABTestVersion } from '../../utils/getABTestVersion';
+import { DiscountBanner } from '../DiscountBanner/DiscountBanner';
 
 const API_URL = 'https://dummyjson.com/products';
 
@@ -13,7 +15,8 @@ export type Product = {
   price: number;
   thumbnail: string;
   image: string;
-  quantity?: number; // Optional to handle adding a new product
+  quantity?: number;
+  discountPercentage?: number;
 };
 
 export interface CartProps {
@@ -25,8 +28,26 @@ export const Products: FunctionComponent = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [error, setError] = useState(false);
   const [cart, setCart] = useLocalStorageState<CartProps>('cart', {});
+  const version = getABTestVersion();
 
   console.log(cart);
+
+  const discountKeywords = ['mascara', 'essence', 'lipstick', 'calvin', 'bed', 'apple', 'pepper', 'kiwi'];
+
+  const getRandomDiscount = (): number => {
+    // Generate a random discount between 10% and 50%
+    return Math.floor(Math.random() * (50 - 10 + 1)) + 10;
+  };
+
+  const getDiscountedPrice = (price: number, discount: number): number => {
+    return Math.round(price - (price * discount) / 100);
+  };
+
+  const hasDiscount = (title: string): boolean => {
+    return discountKeywords.some((keyword) =>
+      title.toLowerCase().includes(keyword)
+    );
+  };
 
   useEffect(() => {
     fetchData(API_URL);
@@ -37,7 +58,16 @@ export const Products: FunctionComponent = () => {
       const response = await fetch(url);
       if (response.ok) {
         const data = await response.json();
-        setProducts(data.products);
+
+        const updatedProducts = data.products.map((product: Product) => {
+          if (version === 'B' && hasDiscount(product.title)) {
+            const discount = getRandomDiscount();
+            return { ...product, discountPercentage: discount };
+          }
+          return product;
+        });
+
+        setProducts(updatedProducts);
         setIsLoading(false);
       } else {
         setError(true);
@@ -85,15 +115,36 @@ export const Products: FunctionComponent = () => {
 
   return (
     <section className={classes.productPage}>
-      <h1>Products</h1>
+      <h1>Товары</h1>
 
       <div className={classes.container}>
         {products.map((product) => (
-          <div className={classes.product} key={product.id}>
+          <div className={classes.product} key={product.id} style={{ position: 'relative' }}>
+          {version === 'B' && hasDiscount(product.title) && (
+            <DiscountBanner discountText={`Скидка ${product.discountPercentage}%`} />
+          )}
             <img src={product.thumbnail} alt={product.title} />
             <h3>{product.title}</h3>
-            <p>Price: <CurrencyFormatter amount={product.price} /></p>
-            <button onClick={() => addToCart(product)}>Add to Cart</button>
+            <p>
+              {version === 'B' && hasDiscount(product.title) && product.discountPercentage ? (
+                <>
+                  {/* Crossed-out original price */}
+                  <span style={{ textDecoration: 'line-through', color: 'gray', marginRight: '10px' }}>
+                    <CurrencyFormatter amount={product.price} />
+                  </span>
+                  {/* Discounted price in green */}
+                  <span style={{ color: 'green', fontWeight: 'bold' }}>
+                    <CurrencyFormatter amount={getDiscountedPrice(product.price, product.discountPercentage)} />
+                  </span>
+                </>
+              ) : (
+                // Regular price if no discount
+                <span>
+                  <CurrencyFormatter amount={product.price} />
+                </span>
+              )}
+            </p>
+            <button onClick={() => addToCart(product)}>Добавить в корзину</button>
           </div>
         ))}
       </div>

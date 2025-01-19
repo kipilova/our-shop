@@ -64,3 +64,14 @@
   text-align: center;
 }
 
+.discountBadge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background-color: red;
+  color: white;
+  padding: 5px 10px;
+  font-weight: bold;
+  border-radius: 5px;
+  z-index: 1;
+}

@@ -8,6 +8,6 @@ export const ResetCartButton = () => {
   };
 
   return (
-    <button onClick={resetCart}>Reset Cart</button>
+    <button onClick={resetCart}>Удалить корзину</button>
   );
 };

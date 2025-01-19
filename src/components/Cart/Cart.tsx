@@ -54,7 +54,7 @@ export const Cart: FunctionComponent = () => {
 
   return (
     <section className={classes.cart}>
-      <h1>Cart</h1>
+      <h1>Корзина</h1>
 
       <div className={classes.container}>
         {getProducts().map((product) => (
