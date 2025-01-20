@@ -4,7 +4,13 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/our-shop/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self'; 
+      script-src 'self' https://mc.yandex.ru 'sha256-kPx0AsF0oz2kXiZ875xSvv693TBHkQ/0SkMJZnnNpnQ='; 
+      connect-src 'self' https://dummyjson.com; 
+      style-src 'self' 'unsafe-inline'; 
+      img-src 'self' data: https://mc.yandex.ru https://cdn.dummyjson.com; 
+    ">
     <title>Shopping Cart - buy online your next thingy</title>
     <script type="module" crossorigin src="/our-shop/assets/index-267889bc.js"></script>
     <link rel="stylesheet" href="/our-shop/assets/index-5423a5ec.css">
