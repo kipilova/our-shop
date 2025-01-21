@@ -1,6 +1,4 @@
 import { FunctionComponent, useEffect, useState } from 'react';
-import useLocalStorageState from 'use-local-storage-state';
-
 import { CurrencyFormatter } from '../CurrencyFormatter';
 import classes from './products.module.scss';
 import { Loader } from '../Loader';
@@ -19,15 +17,10 @@ export type Product = {
   discountPercentage?: number;
 };
 
-export interface CartProps {
-  [productId: string]: Product;
-}
-
 export const Products: FunctionComponent = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
   const [error, setError] = useState(false);
-  const [cart, setCart] = useLocalStorageState<CartProps>('cart', {});
   const version = getABTestVersion();
 
   const discountKeywords = ['mascara', 'essence', 'lipstick', 'calvin', 'bed', 'apple', 'pepper', 'kiwi'];
@@ -74,30 +67,6 @@ export const Products: FunctionComponent = () => {
     }
   }
 
-  const addToCart = (product: Product): void => {
-    setCart((prevCart = {}) => {
-      const existingProduct = prevCart[product.id];
-
-      if (existingProduct) {
-        return {
-          ...prevCart,
-          [product.id]: {
-            ...existingProduct,
-            quantity: (existingProduct.quantity || 1) + 1,
-          },
-        };
-      }
-
-      return {
-        ...prevCart,
-        [product.id]: {
-          ...product,
-          quantity: 1,
-        },
-      };
-    });
-  };
-
   if (error) {
     return <h3 className={classes.error}>An error occurred when fetching data. Please check the API and try again.</h3>;
   }
@@ -133,7 +102,7 @@ export const Products: FunctionComponent = () => {
                 </span>
               )}
             </p>
-            <button onClick={() => addToCart(product)}>Добавить в корзину</button>
+            <button>Добавить в корзину</button>
           </div>
         ))}
       </div>
