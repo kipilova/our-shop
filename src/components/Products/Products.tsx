@@ -1,5 +1,5 @@
 import { FunctionComponent, useEffect, useState } from 'react';
-import useLocalStorageState from 'use-local-storage-state';
+// import useLocalStorageState from 'use-local-storage-state';
 
 import { CurrencyFormatter } from '../CurrencyFormatter';
 import classes from './products.module.scss';
@@ -29,6 +29,8 @@ export const Products: FunctionComponent = () => {
   const [error, setError] = useState(false);
   const [cart, setCart] = useState<CartProps>({}); // Инициализируем состояние для корзины
   const version = getABTestVersion();
+
+  console.log(cart);
 
   const discountKeywords = ['mascara', 'essence', 'lipstick', 'calvin', 'bed', 'apple', 'pepper', 'kiwi'];
 
