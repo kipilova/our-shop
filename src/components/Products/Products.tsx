@@ -103,11 +103,6 @@ export const Products: FunctionComponent = () => {
         },
       };
     });
-
-    // Вызов Яндекс.Метрики
-    if (typeof ym !== 'undefined') {
-      ym(99601397, 'reachGoal', 'addToCart');
-    }
   };
 
   if (error) {
