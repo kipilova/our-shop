@@ -27,7 +27,6 @@ export const Products: FunctionComponent = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
   const [error, setError] = useState(false);
-  const [cart, setCart] = useLocalStorageState<CartProps>('cart', {});
   const version = getABTestVersion();
 
   const discountKeywords = ['mascara', 'essence', 'lipstick', 'calvin', 'bed', 'apple', 'pepper', 'kiwi'];
