@@ -100,15 +100,6 @@ export const Products: FunctionComponent = () => {
     };
   });
 
-  // Увеличиваем счётчик кликов
-  setButtonClicks((prevCount) => prevCount + 1);
-
-  // Отправляем событие в Яндекс.Метрику
-  if (typeof ym !== 'undefined') {
-    ym(99601397,'reachGoal','addToCart')
-  }
-
-  console.log(`Метрика: Товар ${product.title} добавлен в корзину.`);
 };
 
   if (error) {
