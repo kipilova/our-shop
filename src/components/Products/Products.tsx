@@ -101,6 +101,7 @@ export const Products: FunctionComponent = () => {
 
     // Отправка события в Яндекс.Метрику
     if (window.ym) {
+      console.log("Цель.");
       window.ym(99601397, 'reachGoal', 'add_to_cart', {
         product_title: product.title,
         product_price: product.price,
