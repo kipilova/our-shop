@@ -20,13 +20,14 @@ export type Product = {
 };
 
 export interface CartProps {
-  [productId: string]: Product;
+  [productId: string]: Product; // Объект, где ключ — ID товара, а значение — объект товара
 }
 
 export const Products: FunctionComponent = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
   const [error, setError] = useState(false);
+  const [cart, setCart] = useState<CartProps>({}); // Инициализируем состояние для корзины
   const version = getABTestVersion();
 
   const discountKeywords = ['mascara', 'essence', 'lipstick', 'calvin', 'bed', 'apple', 'pepper', 'kiwi'];
