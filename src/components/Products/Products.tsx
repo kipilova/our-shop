@@ -28,6 +28,7 @@ export const Products: FunctionComponent = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [error, setError] = useState(false);
   const [cart, setCart] = useLocalStorageState<CartProps>('cart', {});
+  const [buttonClicks, setButtonClicks] = useState(0); // Состояние для счётчика кликов
   const version = getABTestVersion();
 
   console.log(cart);
@@ -35,7 +36,6 @@ export const Products: FunctionComponent = () => {
   const discountKeywords = ['mascara', 'essence', 'lipstick', 'calvin', 'bed', 'apple', 'pepper', 'kiwi'];
 
   const getRandomDiscount = (): number => {
-    // Generate a random discount between 10% and 50%
     return Math.floor(Math.random() * (50 - 10 + 1)) + 10;
   };
 
@@ -44,9 +44,7 @@ export const Products: FunctionComponent = () => {
   };
 
   const hasDiscount = (title: string): boolean => {
-    return discountKeywords.some((keyword) =>
-      title.toLowerCase().includes(keyword)
-    );
+    return discountKeywords.some((keyword) => title.toLowerCase().includes(keyword));
   };
 
   useEffect(() => {
@@ -83,7 +81,6 @@ export const Products: FunctionComponent = () => {
     setCart((prevCart = {}) => {
       const existingProduct = prevCart[product.id];
 
-      // If the product already exists in the cart, increment the quantity
       if (existingProduct) {
         return {
           ...prevCart,
@@ -94,7 +91,6 @@ export const Products: FunctionComponent = () => {
         };
       }
 
-      // Otherwise, add the product to the cart with quantity 1
       return {
         ...prevCart,
         [product.id]: {
@@ -104,10 +100,20 @@ export const Products: FunctionComponent = () => {
       };
     });
 
-    // Вызов Яндекс.Метрики
+    // Увеличиваем счётчик кликов
+    setButtonClicks((prevCount) => prevCount + 1);
+
+    // Отправляем событие в Яндекс.Метрику
     if (typeof ym !== 'undefined') {
-      ym(99601397, 'reachGoal', 'addToCart');
+      ym(99601397, 'reachGoal', 'addToCart', {
+        productId: product.id,
+        title: product.title,
+        price: product.price,
+        discount: product.discountPercentage || 0,
+      });
     }
+
+    console.log(`Метрика: Товар ${product.title} добавлен в корзину.`);
   };
 
   if (error) {
@@ -121,29 +127,26 @@ export const Products: FunctionComponent = () => {
   return (
     <section className={classes.productPage}>
       <h1>Товары</h1>
-
+      <p>Количество нажатий на кнопки: {buttonClicks}</p> {/* Отображение счётчика */}
       <div className={classes.container}>
         {products.map((product) => (
           <div className={classes.product} key={product.id} style={{ position: 'relative' }}>
-          {version === 'B' && hasDiscount(product.title) && (
-            <DiscountBanner discountText={`Скидка ${product.discountPercentage}%`} />
-          )}
+            {version === 'B' && hasDiscount(product.title) && (
+              <DiscountBanner discountText={`Скидка ${product.discountPercentage}%`} />
+            )}
             <img src={product.thumbnail} alt={product.title} />
             <h3>{product.title}</h3>
             <p>
               {version === 'B' && hasDiscount(product.title) && product.discountPercentage ? (
                 <>
-                  {/* Crossed-out original price */}
                   <span style={{ textDecoration: 'line-through', color: 'gray', marginRight: '10px' }}>
                     <CurrencyFormatter amount={product.price} />
                   </span>
-                  {/* Discounted price in green */}
                   <span style={{ color: 'green', fontWeight: 'bold' }}>
                     <CurrencyFormatter amount={getDiscountedPrice(product.price, product.discountPercentage)} />
                   </span>
                 </>
               ) : (
-                // Regular price if no discount
                 <span>
                   <CurrencyFormatter amount={product.price} />
                 </span>
