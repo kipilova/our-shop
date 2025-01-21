@@ -28,10 +28,7 @@ export const Products: FunctionComponent = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [error, setError] = useState(false);
   const [cart, setCart] = useLocalStorageState<CartProps>('cart', {});
-  const [buttonClicks, setButtonClicks] = useState(0); // Состояние для счётчика кликов
   const version = getABTestVersion();
-
-  console.log(cart);
 
   const discountKeywords = ['mascara', 'essence', 'lipstick', 'calvin', 'bed', 'apple', 'pepper', 'kiwi'];
 
@@ -77,30 +74,29 @@ export const Products: FunctionComponent = () => {
     }
   }
 
- const addToCart = (product: Product): void => {
-  setCart((prevCart = {}) => {
-    const existingProduct = prevCart[product.id];
+  const addToCart = (product: Product): void => {
+    setCart((prevCart = {}) => {
+      const existingProduct = prevCart[product.id];
 
-    if (existingProduct) {
+      if (existingProduct) {
+        return {
+          ...prevCart,
+          [product.id]: {
+            ...existingProduct,
+            quantity: (existingProduct.quantity || 1) + 1,
+          },
+        };
+      }
+
       return {
         ...prevCart,
         [product.id]: {
-          ...existingProduct,
-          quantity: (existingProduct.quantity || 1) + 1,
+          ...product,
+          quantity: 1,
         },
       };
-    }
-
-    return {
-      ...prevCart,
-      [product.id]: {
-        ...product,
-        quantity: 1,
-      },
-    };
-  });
-
-};
+    });
+  };
 
   if (error) {
     return <h3 className={classes.error}>An error occurred when fetching data. Please check the API and try again.</h3>;
@@ -113,7 +109,6 @@ export const Products: FunctionComponent = () => {
   return (
     <section className={classes.productPage}>
       <h1>Товары</h1>
-      <p>Количество нажатий на кнопки: {buttonClicks}</p> {/* Отображение счётчика */}
       <div className={classes.container}>
         {products.map((product) => (
           <div className={classes.product} key={product.id} style={{ position: 'relative' }}>
