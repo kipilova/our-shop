@@ -1,5 +1,6 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import useLocalStorageState from 'use-local-storage-state';
+import ym from 'react-yandex-metrika';
 
 import { CurrencyFormatter } from '../CurrencyFormatter';
 import classes from './products.module.scss';
@@ -103,6 +104,11 @@ export const Products: FunctionComponent = () => {
         },
       };
     });
+
+    // Вызов Яндекс.Метрики
+    if (typeof ym !== 'undefined') {
+      ym(99601397, 'reachGoal', 'addToCart');
+    }
   };
 
   if (error) {
