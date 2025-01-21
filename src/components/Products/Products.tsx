@@ -77,44 +77,39 @@ export const Products: FunctionComponent = () => {
     }
   }
 
-  const addToCart = (product: Product): void => {
-    setCart((prevCart = {}) => {
-      const existingProduct = prevCart[product.id];
+ const addToCart = (product: Product): void => {
+  setCart((prevCart = {}) => {
+    const existingProduct = prevCart[product.id];
 
-      if (existingProduct) {
-        return {
-          ...prevCart,
-          [product.id]: {
-            ...existingProduct,
-            quantity: (existingProduct.quantity || 1) + 1,
-          },
-        };
-      }
-
+    if (existingProduct) {
       return {
         ...prevCart,
         [product.id]: {
-          ...product,
-          quantity: 1,
+          ...existingProduct,
+          quantity: (existingProduct.quantity || 1) + 1,
         },
       };
-    });
-
-    // Увеличиваем счётчик кликов
-    setButtonClicks((prevCount) => prevCount + 1);
-
-    // Отправляем событие в Яндекс.Метрику
-    if (typeof ym !== 'undefined') {
-      ym(99601397, 'reachGoal', 'addToCart', {
-        productId: product.id,
-        title: product.title,
-        price: product.price,
-        discount: product.discountPercentage || 0,
-      });
     }
 
-    console.log(`Метрика: Товар ${product.title} добавлен в корзину.`);
-  };
+    return {
+      ...prevCart,
+      [product.id]: {
+        ...product,
+        quantity: 1,
+      },
+    };
+  });
+
+  // Увеличиваем счётчик кликов
+  setButtonClicks((prevCount) => prevCount + 1);
+
+  // Отправляем событие в Яндекс.Метрику
+  if (typeof ym !== 'undefined') {
+    ym(99601397, 'reachGoal', 'addToCart'); // Удалён четвёртый аргумент
+  }
+
+  console.log(`Метрика: Товар ${product.title} добавлен в корзину.`);
+};
 
   if (error) {
     return <h3 className={classes.error}>An error occurred when fetching data. Please check the API and try again.</h3>;
