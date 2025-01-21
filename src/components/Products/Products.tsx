@@ -30,12 +30,9 @@ export const Products: FunctionComponent = () => {
   const [cart, setCart] = useLocalStorageState<CartProps>('cart', {});
   const version = getABTestVersion();
 
-  console.log(cart);
-
   const discountKeywords = ['mascara', 'essence', 'lipstick', 'calvin', 'bed', 'apple', 'pepper', 'kiwi'];
 
   const getRandomDiscount = (): number => {
-    // Generate a random discount between 10% and 50%
     return Math.floor(Math.random() * (50 - 10 + 1)) + 10;
   };
 
@@ -83,7 +80,6 @@ export const Products: FunctionComponent = () => {
     setCart((prevCart = {}) => {
       const existingProduct = prevCart[product.id];
 
-      // If the product already exists in the cart, increment the quantity
       if (existingProduct) {
         return {
           ...prevCart,
@@ -94,7 +90,6 @@ export const Products: FunctionComponent = () => {
         };
       }
 
-      // Otherwise, add the product to the cart with quantity 1
       return {
         ...prevCart,
         [product.id]: {
@@ -103,6 +98,14 @@ export const Products: FunctionComponent = () => {
         },
       };
     });
+
+    // Отправка события в Яндекс.Метрику
+    if (window.ym) {
+      window.ym(99601397, 'reachGoal', 'add_to_cart', {
+        product_title: product.title,
+        product_price: product.price,
+      });
+    }
   };
 
   if (error) {
@@ -120,25 +123,22 @@ export const Products: FunctionComponent = () => {
       <div className={classes.container}>
         {products.map((product) => (
           <div className={classes.product} key={product.id} style={{ position: 'relative' }}>
-          {version === 'B' && hasDiscount(product.title) && (
-            <DiscountBanner discountText={`Скидка ${product.discountPercentage}%`} />
-          )}
+            {version === 'B' && hasDiscount(product.title) && (
+              <DiscountBanner discountText={`Скидка ${product.discountPercentage}%`} />
+            )}
             <img src={product.thumbnail} alt={product.title} />
             <h3>{product.title}</h3>
             <p>
               {version === 'B' && hasDiscount(product.title) && product.discountPercentage ? (
                 <>
-                  {/* Crossed-out original price */}
                   <span style={{ textDecoration: 'line-through', color: 'gray', marginRight: '10px' }}>
                     <CurrencyFormatter amount={product.price} />
                   </span>
-                  {/* Discounted price in green */}
                   <span style={{ color: 'green', fontWeight: 'bold' }}>
                     <CurrencyFormatter amount={getDiscountedPrice(product.price, product.discountPercentage)} />
                   </span>
                 </>
               ) : (
-                // Regular price if no discount
                 <span>
                   <CurrencyFormatter amount={product.price} />
                 </span>
