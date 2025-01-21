@@ -105,7 +105,7 @@ export const Products: FunctionComponent = () => {
 
   // Отправляем событие в Яндекс.Метрику
   if (typeof ym !== 'undefined') {
-    ym(99601397, 'reachGoal', 'addToCart'); // Удалён четвёртый аргумент
+    ym(99601397,'reachGoal','addToCart')
   }
 
   console.log(`Метрика: Товар ${product.title} добавлен в корзину.`);
